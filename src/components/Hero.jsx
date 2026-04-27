@@ -19,7 +19,9 @@ export default function Hero() {
   useEffect(() => {
     fetch("/api/profile-photo")
       .then((r) => r.json())
-      .then((d) => { if (d.url) setProfilePhoto(d.url); });
+      .then((d) => {
+        if (d.url) setProfilePhoto(d.url);
+      });
   }, []);
 
   return (
@@ -32,7 +34,7 @@ export default function Hero() {
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
           scrolled
             ? "bg-[#0a0a0a]/90 backdrop-blur-md border-b-3 border-[#2C2C2C]"
-            : "bg-transparent"
+            : "bg-[#0a0a0a]/80 md:bg-transparent backdrop-blur-sm md:backdrop-blur-none"
         }`}
       >
         <div className="max-w-7xl mx-auto px-6 md:px-10 h-16 flex items-center justify-between">
@@ -41,7 +43,10 @@ export default function Hero() {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.3 }}
             className="font-black text-2xl text-white tracking-tight"
-            style={{ fontFamily: "'Bebas Neue', sans-serif", letterSpacing: "0.08em" }}
+            style={{
+              fontFamily: "'Bebas Neue', sans-serif",
+              letterSpacing: "0.08em",
+            }}
           >
             SAS
           </motion.span>
@@ -54,11 +59,13 @@ export default function Hero() {
                 transition={{ delay: 0.2 + i * 0.1 }}
               >
                 {link === "Connect" ? (
-                  <ConnectDrawer trigger={
-                    <button className="text-sm font-bold uppercase tracking-widest text-[#52C41A] border-2 border-[#52C41A] px-4 py-1.5 hover:bg-[#52C41A] hover:text-black transition-all duration-200">
-                      {link}
-                    </button>
-                  } />
+                  <ConnectDrawer
+                    trigger={
+                      <button className="text-sm font-bold uppercase tracking-widest text-[#52C41A] border-2 border-[#52C41A] px-4 py-1.5 hover:bg-[#52C41A] hover:text-black transition-all duration-200">
+                        {link}
+                      </button>
+                    }
+                  />
                 ) : (
                   <a
                     href={`#${link.toLowerCase()}`}
@@ -72,18 +79,20 @@ export default function Hero() {
           </ul>
           {/* Mobile connect */}
           <div className="md:hidden">
-            <ConnectDrawer trigger={
-              <button className="text-xs font-bold uppercase tracking-widest text-[#52C41A] border-2 border-[#52C41A] px-3 py-1.5">
-                Connect
-              </button>
-            } />
+            <ConnectDrawer
+              trigger={
+                <button className="text-xs font-bold uppercase tracking-widest text-[#52C41A] border-2 border-[#52C41A] px-3 py-1.5">
+                  Connect
+                </button>
+              }
+            />
           </div>
         </div>
       </motion.nav>
 
       {/* HERO SECTION */}
       <section
-        className="relative min-h-screen bg-[#0a0a0a] flex flex-col items-center justify-center overflow-hidden px-6"
+        className="relative min-h-screen bg-[#0a0a0a] flex flex-col items-center justify-center overflow-hidden px-6 pt-20 md:pt-0 isolate"
         style={{
           backgroundImage: `radial-gradient(ellipse at 20% 50%, rgba(82,196,26,0.08) 0%, transparent 60%),
             radial-gradient(ellipse at 80% 20%, rgba(82,196,26,0.05) 0%, transparent 50%)`,
@@ -160,7 +169,11 @@ export default function Hero() {
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.35, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+              transition={{
+                delay: 0.35,
+                duration: 0.7,
+                ease: [0.16, 1, 0.3, 1],
+              }}
               className="text-white font-black leading-none mb-6"
               style={{
                 fontFamily: "'Bebas Neue', sans-serif",
@@ -178,8 +191,8 @@ export default function Hero() {
               className="text-white/50 text-base md:text-lg leading-relaxed max-w-sm mb-8"
               style={{ fontFamily: "'DM Serif Display', serif" }}
             >
-              Nature, people, cars, and everything in between —
-              captured through a lens that finds beauty in the unexpected.
+              Nature, people, cars, and everything in between — captured through
+              a lens that finds beauty in the unexpected.
             </motion.p>
 
             <motion.div
@@ -194,11 +207,13 @@ export default function Hero() {
               >
                 View Work
               </a>
-              <ConnectDrawer trigger={
-                <button className="inline-block bg-transparent text-white font-black uppercase tracking-widest text-sm px-8 py-3 border-3 border-white/30 hover:border-white hover:text-white transition-all duration-200">
-                  Let's Connect
-                </button>
-              } />
+              <ConnectDrawer
+                trigger={
+                  <button className="inline-block bg-transparent text-white font-black uppercase tracking-widest text-sm px-8 py-3 border-3 border-white/30 hover:border-white hover:text-white transition-all duration-200">
+                    Let's Connect
+                  </button>
+                }
+              />
             </motion.div>
 
             {/* Stats */}
@@ -220,7 +235,9 @@ export default function Hero() {
                   >
                     {num}
                   </div>
-                  <div className="text-white/40 text-xs uppercase tracking-widest">{label}</div>
+                  <div className="text-white/40 text-xs uppercase tracking-widest">
+                    {label}
+                  </div>
                 </div>
               ))}
             </motion.div>
@@ -232,9 +249,11 @@ export default function Hero() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1.2 }}
-          className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
+          className="hidden md:flex absolute bottom-10 left-1/2 -translate-x-1/2 flex-col items-center gap-2"
         >
-          <span className="text-white/30 text-xs uppercase tracking-widest">Scroll</span>
+          <span className="text-white/30 text-xs uppercase tracking-widest">
+            Scroll
+          </span>
           <motion.div
             animate={{ y: [0, 8, 0] }}
             transition={{ repeat: Infinity, duration: 1.4 }}

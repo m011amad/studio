@@ -243,7 +243,17 @@ export default function Gallery({ categories, photosByCategory }) {
             ) : isMobile ? (
               <MobilePhotoStack photos={currentPhotos} />
             ) : (
-              <div className="columns-2 lg:columns-3 xl:columns-4 gap-4">
+              <div
+                className={`gap-4 ${
+                  currentPhotos.length === 1
+                    ? "columns-1"
+                    : currentPhotos.length === 2
+                      ? "columns-2"
+                      : currentPhotos.length === 3
+                        ? "columns-2 lg:columns-3"
+                        : "columns-2 lg:columns-3 xl:columns-4"
+                }`}
+              >
                 {currentPhotos.map((photo, i) => (
                   <MasonryPhoto
                     key={photo.id}

@@ -5,7 +5,13 @@
  * Install dotenv if needed: npm install -D dotenv
  */
 
-import "dotenv/config";
+import { config } from "dotenv";
+import { resolve, dirname } from "path";
+import { fileURLToPath } from "url";
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+config({ path: resolve(__dirname, "../.env.local") });
+
 import { neon } from "@neondatabase/serverless";
 import { drizzle } from "drizzle-orm/neon-http";
 import { categories, users } from "../src/lib/schema.js";

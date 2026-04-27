@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import { signOut } from "next-auth/react";
 import { motion, AnimatePresence } from "framer-motion";
 import PhotoUploader from "./PhotoUploader";
+import ProfilePhotoUploader from "./ProfilePhotoUploader";
 
 function CategoryManager({ categories, onUpdated }) {
   const [editing, setEditing] = useState(null); // { id, name }
@@ -251,6 +252,7 @@ export default function AdminDashboard() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Left col */}
             <div className="lg:col-span-1 space-y-8">
+              <ProfilePhotoUploader />
               <CategoryManager categories={categories} onUpdated={refresh} />
               <PhotoUploader categories={categories} onUploaded={refresh} />
             </div>

@@ -5,12 +5,6 @@ import { eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
 import { v2 as cloudinary } from "cloudinary";
 
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
-});
-
 export async function GET() {
   try {
     const [user] = await db.select({
@@ -30,7 +24,12 @@ export async function POST(req) {
   try {
     const { url, publicId } = await req.json();
 
-    // Delete old profile photo from Cloudinary if exists
+    cloudinary.config({
+      cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+      api_key: process.env.CLOUDINARY_API_KEY,
+      api_secret: process.env.CLOUDINARY_API_SECRET,
+    });
+
     const [existing] = await db.select().from(users).where(eq(users.id, Number(session.user.id))).limit(1);
     if (existing?.profilePhotoPublicId) {
       await cloudinary.uploader.destroy(existing.profilePhotoPublicId);

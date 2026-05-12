@@ -39,7 +39,7 @@ export default function ViewfinderCursor() {
         opacity: isPointer ? 0.7 : 1,
       }}
       transition={{ duration: 0.15 }}
-      className="fixed top-0 left-0 z-[9999] pointer-events-none hidden lg:block"
+      className="fixed top-0 left-0 z-[9999] pointer-events-none hidden md:block"
     >
       <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
         <circle cx="18" cy="18" r="16" stroke="#C9A96E" strokeWidth="1" opacity="0.85" />

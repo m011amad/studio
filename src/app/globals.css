@@ -128,3 +128,10 @@
     @apply font-sans;
   }
 }
+
+/* Custom viewfinder cursor — desktop/mouse only */
+@media (pointer: fine) {
+  * {
+    cursor: none !important;
+  }
+}

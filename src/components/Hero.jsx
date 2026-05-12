@@ -1,14 +1,40 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import { useRouter } from "next/navigation";
+import { Mail } from "lucide-react";
 import ConnectDrawer from "./ConnectDrawer";
 
-const NAV_LINKS = ["Work", "About", "Connect"];
+function InstagramIcon({ size = 18 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+      <circle cx="12" cy="12" r="4" />
+      <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
+    </svg>
+  );
+}
+
+const NAV_LINKS = ["Work", "About", "Get a Quote"];
 
 export default function Hero() {
   const [scrolled, setScrolled] = useState(false);
   const [profilePhoto, setProfilePhoto] = useState(null);
+  const router = useRouter();
+  const tapCount = useRef(0);
+  const tapTimer = useRef(null);
+
+  const handleLogoTap = () => {
+    tapCount.current += 1;
+    clearTimeout(tapTimer.current);
+    if (tapCount.current >= 5) {
+      tapCount.current = 0;
+      router.push("/admin");
+    } else {
+      tapTimer.current = setTimeout(() => { tapCount.current = 0; }, 2000);
+    }
+  };
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60);
@@ -33,8 +59,8 @@ export default function Hero() {
         transition={{ duration: 0.6, ease: "easeOut" }}
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
           scrolled
-            ? "bg-[#0a0a0a]/90 backdrop-blur-md border-b-3 border-[#2C2C2C]"
-            : "bg-[#0a0a0a]/80 md:bg-transparent backdrop-blur-sm md:backdrop-blur-none"
+            ? "bg-[#0E0D0C]/90 backdrop-blur-md border-b-3 border-[#2A2520]"
+            : "bg-[#0E0D0C]/80 md:bg-transparent backdrop-blur-sm md:backdrop-blur-none"
         }`}
       >
         <div className="max-w-7xl mx-auto px-6 md:px-10 h-16 flex items-center justify-between">
@@ -42,7 +68,8 @@ export default function Hero() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.3 }}
-            className="font-black text-2xl text-white tracking-tight"
+            onClick={handleLogoTap}
+            className="font-black text-2xl text-white tracking-tight cursor-default select-none"
             style={{
               fontFamily: "'Bebas Neue', sans-serif",
               letterSpacing: "0.08em",
@@ -58,10 +85,10 @@ export default function Hero() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 + i * 0.1 }}
               >
-                {link === "Connect" ? (
+                {link === "Get a Quote" ? (
                   <ConnectDrawer
                     trigger={
-                      <button className="text-sm font-bold uppercase tracking-widest text-[#52C41A] border-2 border-[#52C41A] px-4 py-1.5 hover:bg-[#52C41A] hover:text-black transition-all duration-200">
+                      <button className="text-sm font-bold uppercase tracking-widest text-[#C9A96E] border-2 border-[#C9A96E] px-4 py-1.5 hover:bg-[#C9A96E] hover:text-black transition-all duration-200">
                         {link}
                       </button>
                     }
@@ -81,8 +108,8 @@ export default function Hero() {
           <div className="md:hidden">
             <ConnectDrawer
               trigger={
-                <button className="text-xs font-bold uppercase tracking-widest text-[#52C41A] border-2 border-[#52C41A] px-3 py-1.5">
-                  Connect
+                <button className="text-xs font-bold uppercase tracking-widest text-[#C9A96E] border-2 border-[#C9A96E] px-3 py-1.5">
+                  Get a Quote
                 </button>
               }
             />
@@ -92,10 +119,10 @@ export default function Hero() {
 
       {/* HERO SECTION */}
       <section
-        className="relative min-h-screen bg-[#0a0a0a] flex flex-col items-center justify-center overflow-hidden px-6 pt-20 md:pt-0 isolate"
+        className="relative min-h-screen bg-[#0E0D0C] flex flex-col items-center justify-center overflow-hidden px-6 pt-20 md:pt-0 isolate"
         style={{
-          backgroundImage: `radial-gradient(ellipse at 20% 50%, rgba(82,196,26,0.08) 0%, transparent 60%),
-            radial-gradient(ellipse at 80% 20%, rgba(82,196,26,0.05) 0%, transparent 50%)`,
+          backgroundImage: `radial-gradient(ellipse at 20% 50%, rgba(201,169,110,0.07) 0%, transparent 60%),
+            radial-gradient(ellipse at 80% 20%, rgba(201,169,110,0.04) 0%, transparent 50%)`,
         }}
       >
         {/* Grain overlay */}
@@ -109,10 +136,10 @@ export default function Hero() {
         />
 
         {/* Decorative lines */}
-        <div className="absolute top-32 left-10 w-px h-32 bg-[#52C41A]/20" />
-        <div className="absolute top-32 left-10 w-32 h-px bg-[#52C41A]/20" />
-        <div className="absolute bottom-32 right-10 w-px h-32 bg-[#52C41A]/20" />
-        <div className="absolute bottom-32 right-10 w-32 h-px bg-[#52C41A]/20" />
+        <div className="absolute top-32 left-10 w-px h-32 bg-[#C9A96E]/20" />
+        <div className="absolute top-32 left-10 w-32 h-px bg-[#C9A96E]/20" />
+        <div className="absolute bottom-32 right-10 w-px h-32 bg-[#C9A96E]/20" />
+        <div className="absolute bottom-32 right-10 w-32 h-px bg-[#C9A96E]/20" />
 
         <div className="relative z-10 flex flex-col md:flex-row items-center gap-12 md:gap-20 max-w-5xl w-full">
           {/* Portrait */}
@@ -124,10 +151,10 @@ export default function Hero() {
           >
             {/* Offset border */}
             <div
-              className="absolute inset-0 rounded-full border-3 border-[#52C41A]"
+              className="absolute inset-0 rounded-full border-3 border-[#C9A96E]"
               style={{ transform: "translate(8px, 8px)" }}
             />
-            <div className="relative w-52 h-52 md:w-72 md:h-72 rounded-full border-3 border-[#2C2C2C] overflow-hidden bg-[#1a1a1a]">
+            <div className="relative w-52 h-52 md:w-72 md:h-72 rounded-full border-3 border-[#2A2520] overflow-hidden bg-[#161412]">
               {/* Replace src with actual Cloudinary URL */}
               <img
                 src={profilePhoto || "/placeholder-sas.jpg"}
@@ -136,8 +163,8 @@ export default function Hero() {
                 onError={(e) => {
                   e.target.style.display = "none";
                   e.target.parentNode.innerHTML += `
-                    <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#1a1a1a;">
-                      <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#52C41A" stroke-width="1">
+                    <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#161412;">
+                      <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#C9A96E" stroke-width="1">
                         <circle cx="12" cy="8" r="4"/><path d="M6 20v-2a6 6 0 0 1 12 0v2"/>
                       </svg>
                     </div>`;
@@ -149,9 +176,9 @@ export default function Hero() {
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ delay: 0.8, type: "spring", stiffness: 300 }}
-              className="absolute bottom-3 right-3 w-7 h-7 rounded-full bg-[#52C41A] border-3 border-[#0a0a0a] flex items-center justify-center"
+              className="absolute bottom-3 right-3 w-7 h-7 rounded-full bg-[#C9A96E] border-3 border-[#0E0D0C] flex items-center justify-center"
             >
-              <div className="w-2.5 h-2.5 rounded-full bg-[#0a0a0a]" />
+              <div className="w-2.5 h-2.5 rounded-full bg-[#0E0D0C]" />
             </motion.div>
           </motion.div>
 
@@ -161,7 +188,7 @@ export default function Hero() {
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2, duration: 0.5 }}
-              className="text-[#52C41A] text-sm font-bold uppercase tracking-[0.25em] mb-4"
+              className="text-[#C9A96E] text-sm font-bold uppercase tracking-[0.25em] mb-4"
             >
               Visual Storyteller
             </motion.p>
@@ -203,14 +230,14 @@ export default function Hero() {
             >
               <a
                 href="#work"
-                className="inline-block bg-[#52C41A] text-black font-black uppercase tracking-widest text-sm px-8 py-3 border-3 border-[#52C41A] hover:bg-transparent hover:text-[#52C41A] transition-all duration-200"
+                className="inline-block bg-[#C9A96E] text-black font-black uppercase tracking-widest text-sm px-8 py-3 border-3 border-[#C9A96E] hover:bg-transparent hover:text-[#C9A96E] transition-all duration-200"
               >
                 View Work
               </a>
               <ConnectDrawer
                 trigger={
                   <button className="inline-block bg-transparent text-white font-black uppercase tracking-widest text-sm px-8 py-3 border-3 border-white/30 hover:border-white hover:text-white transition-all duration-200">
-                    Let's Connect
+                    Get a Quote
                   </button>
                 }
               />
@@ -241,6 +268,39 @@ export default function Hero() {
                 </div>
               ))}
             </motion.div>
+
+            {/* Social links */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 1.05 }}
+              className="flex gap-4 mt-6 justify-center md:justify-start"
+            >
+              <a
+                href="https://instagram.com/captsas_"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 text-white/40 hover:text-[#C9A96E] transition-colors duration-200 group"
+              >
+                <InstagramIcon size={18} />
+                <span className="text-xs font-bold tracking-widest uppercase">@captsas_</span>
+              </a>
+              <a
+                href="https://instagram.com/s8r_sas"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 text-white/40 hover:text-[#C9A96E] transition-colors duration-200 group"
+              >
+                <InstagramIcon size={18} />
+                <span className="text-xs font-bold tracking-widest uppercase">@s8r_sas</span>
+              </a>
+              <a
+                href="mailto:captsas.media@gmail.com"
+                className="flex items-center gap-2 text-white/40 hover:text-[#C9A96E] transition-colors duration-200"
+              >
+                <Mail size={18} />
+              </a>
+            </motion.div>
           </div>
         </div>
 
@@ -257,7 +317,7 @@ export default function Hero() {
           <motion.div
             animate={{ y: [0, 8, 0] }}
             transition={{ repeat: Infinity, duration: 1.4 }}
-            className="w-px h-8 bg-gradient-to-b from-[#52C41A]/60 to-transparent"
+            className="w-px h-8 bg-gradient-to-b from-[#C9A96E]/60 to-transparent"
           />
         </motion.div>
       </section>

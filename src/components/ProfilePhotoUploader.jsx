@@ -29,7 +29,8 @@ export default function ProfilePhotoUploader() {
     if (!file) return;
     setUploading(true);
 
-    const sigRes = await fetch("/api/cloudinary-sign");
+    const folder = "sas-photography/profile";
+    const sigRes = await fetch(`/api/cloudinary-sign?folder=${folder}`);
     const { timestamp, signature, apiKey, cloudName } = await sigRes.json();
 
     const formData = new FormData();
@@ -37,7 +38,7 @@ export default function ProfilePhotoUploader() {
     formData.append("api_key", apiKey);
     formData.append("timestamp", timestamp);
     formData.append("signature", signature);
-    formData.append("folder", "sas-photography/profile");
+    formData.append("folder", folder);
 
     const res = await fetch(
       `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
@@ -61,9 +62,9 @@ export default function ProfilePhotoUploader() {
   const displayPhoto = preview || current;
 
   return (
-    <div className="border-3 border-[#2C2C2C] bg-white shadow-[6px_6px_0_#2C2C2C] p-6">
+    <div className="border-3 border-[#2A2520] bg-[#F5F0EA] shadow-[6px_6px_0_#2A2520] p-6">
       <h3
-        className="font-black text-[#2C2C2C] text-2xl mb-5 uppercase"
+        className="font-black text-[#2A2520] text-2xl mb-5 uppercase"
         style={{ fontFamily: "'Bebas Neue', sans-serif", letterSpacing: "0.05em" }}
       >
         Profile Photo
@@ -73,7 +74,7 @@ export default function ProfilePhotoUploader() {
         {/* Preview circle */}
         <div className="relative flex-shrink-0">
           <div
-            className="w-28 h-28 rounded-full border-3 border-[#2C2C2C] shadow-[4px_4px_0_#2C2C2C] overflow-hidden bg-[#FFF9F0] flex items-center justify-center cursor-pointer"
+            className="w-28 h-28 rounded-full border-3 border-[#2A2520] shadow-[4px_4px_0_#2A2520] overflow-hidden bg-[#EDE8DF] flex items-center justify-center cursor-pointer"
             onClick={() => inputRef.current?.click()}
           >
             {displayPhoto ? (
@@ -83,7 +84,7 @@ export default function ProfilePhotoUploader() {
                 className="w-full h-full object-cover"
               />
             ) : (
-              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#2C2C2C" strokeWidth="1.5" opacity="0.3">
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#2A2520" strokeWidth="1.5" opacity="0.3">
                 <circle cx="12" cy="8" r="4" />
                 <path d="M6 20v-2a6 6 0 0 1 12 0v2" />
               </svg>
@@ -96,7 +97,7 @@ export default function ProfilePhotoUploader() {
           </div>
           {/* Offset accent */}
           <div
-            className="absolute inset-0 rounded-full border-3 border-[#52C41A] pointer-events-none"
+            className="absolute inset-0 rounded-full border-3 border-[#C9A96E] pointer-events-none"
             style={{ transform: "translate(5px, 5px)", zIndex: -1 }}
           />
         </div>
@@ -114,7 +115,7 @@ export default function ProfilePhotoUploader() {
           {!file ? (
             <button
               onClick={() => inputRef.current?.click()}
-              className="w-full text-sm font-black uppercase tracking-widest py-3 border-3 border-dashed border-[#2C2C2C]/40 hover:border-[#52C41A] hover:text-[#52C41A] text-[#2C2C2C]/60 transition-all bg-[#FFF9F0]"
+              className="w-full text-sm font-black uppercase tracking-widest py-3 border-3 border-dashed border-[#2A2520]/40 hover:border-[#C9A96E] hover:text-[#C9A96E] text-[#2A2520]/60 transition-all bg-[#EDE8DF]"
             >
               {current ? "Change Photo" : "Upload Photo"}
             </button>
@@ -122,7 +123,7 @@ export default function ProfilePhotoUploader() {
             <button
               onClick={handleUpload}
               disabled={uploading}
-              className="w-full text-sm font-black uppercase tracking-widest py-3 bg-[#52C41A] text-black border-3 border-[#2C2C2C] shadow-[4px_4px_0_#2C2C2C] hover:shadow-[2px_2px_0_#2C2C2C] hover:translate-x-0.5 hover:translate-y-0.5 transition-all disabled:opacity-50"
+              className="w-full text-sm font-black uppercase tracking-widest py-3 bg-[#C9A96E] text-black border-3 border-[#2A2520] shadow-[4px_4px_0_#2A2520] hover:shadow-[2px_2px_0_#2A2520] hover:translate-x-0.5 hover:translate-y-0.5 transition-all disabled:opacity-50"
             >
               {uploading ? "Uploading..." : "Save Photo"}
             </button>
@@ -131,7 +132,7 @@ export default function ProfilePhotoUploader() {
           {file && !uploading && (
             <button
               onClick={() => { setFile(null); setPreview(null); }}
-              className="w-full text-xs font-bold uppercase tracking-widest py-2 border-2 border-[#2C2C2C]/20 text-[#2C2C2C]/40 hover:text-[#2C2C2C] hover:border-[#2C2C2C]/60 transition-all"
+              className="w-full text-xs font-bold uppercase tracking-widest py-2 border-2 border-[#2A2520]/20 text-[#2A2520]/40 hover:text-[#2A2520] hover:border-[#2A2520]/60 transition-all"
             >
               Cancel
             </button>
@@ -141,13 +142,13 @@ export default function ProfilePhotoUploader() {
             <motion.p
               initial={{ opacity: 0, y: -4 }}
               animate={{ opacity: 1, y: 0 }}
-              className="text-[#52C41A] text-xs font-black uppercase tracking-widest text-center"
+              className="text-[#C9A96E] text-xs font-black uppercase tracking-widest text-center"
             >
               ✓ Profile photo updated
             </motion.p>
           )}
 
-          <p className="text-[#2C2C2C]/30 text-xs text-center">
+          <p className="text-[#2A2520]/30 text-xs text-center">
             This appears as your circular portrait on the homepage
           </p>
         </div>

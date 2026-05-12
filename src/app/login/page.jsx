@@ -36,16 +36,16 @@ export default function LoginPage() {
 
   return (
     <div
-      className="min-h-screen bg-[#0a0a0a] flex items-center justify-center px-6"
+      className="min-h-screen bg-[#0E0D0C] flex items-center justify-center px-6"
       style={{
         backgroundImage: `radial-gradient(ellipse at 30% 60%, rgba(82,196,26,0.06) 0%, transparent 60%)`,
       }}
     >
       {/* Decorative corners */}
-      <div className="absolute top-8 left-8 w-px h-20 bg-[#52C41A]/20" />
-      <div className="absolute top-8 left-8 w-20 h-px bg-[#52C41A]/20" />
-      <div className="absolute bottom-8 right-8 w-px h-20 bg-[#52C41A]/20" />
-      <div className="absolute bottom-8 right-8 w-20 h-px bg-[#52C41A]/20" />
+      <div className="absolute top-8 left-8 w-px h-20 bg-[#C9A96E]/20" />
+      <div className="absolute top-8 left-8 w-20 h-px bg-[#C9A96E]/20" />
+      <div className="absolute bottom-8 right-8 w-px h-20 bg-[#C9A96E]/20" />
+      <div className="absolute bottom-8 right-8 w-20 h-px bg-[#C9A96E]/20" />
 
       <motion.div
         initial={{ opacity: 0, y: 24 }}
@@ -65,13 +65,13 @@ export default function LoginPage() {
           >
             SAS
           </a>
-          <p className="text-[#52C41A] text-xs font-bold uppercase tracking-[0.25em] mt-2">
+          <p className="text-[#C9A96E] text-xs font-bold uppercase tracking-[0.25em] mt-2">
             Admin Login
           </p>
         </div>
 
         {/* Card */}
-        <div className="bg-[#141414] border-3 border-[#2C2C2C] shadow-[8px_8px_0_#52C41A] p-8">
+        <div className="bg-[#0F0D0B] border-3 border-[#2A2520] shadow-[8px_8px_0_#C9A96E] p-8">
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
               <label className="text-xs font-bold uppercase tracking-widest text-white/40 mb-1.5 block">
@@ -84,7 +84,7 @@ export default function LoginPage() {
                 onChange={handleChange}
                 required
                 placeholder="your@email.com"
-                className="w-full px-4 py-3 bg-[#0a0a0a] border-3 border-[#2C2C2C] text-white placeholder:text-white/20 font-medium focus:outline-none focus:border-[#52C41A] transition-colors"
+                className="w-full px-4 py-3 bg-[#0E0D0C] border-3 border-[#2A2520] text-white placeholder:text-white/20 font-medium focus:outline-none focus:border-[#C9A96E] transition-colors"
               />
             </div>
             <div>
@@ -98,7 +98,7 @@ export default function LoginPage() {
                 onChange={handleChange}
                 required
                 placeholder="••••••••"
-                className="w-full px-4 py-3 bg-[#0a0a0a] border-3 border-[#2C2C2C] text-white placeholder:text-white/20 font-medium focus:outline-none focus:border-[#52C41A] transition-colors"
+                className="w-full px-4 py-3 bg-[#0E0D0C] border-3 border-[#2A2520] text-white placeholder:text-white/20 font-medium focus:outline-none focus:border-[#C9A96E] transition-colors"
               />
             </div>
 
@@ -115,7 +115,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-[#52C41A] text-black font-black uppercase tracking-widest text-sm py-3.5 border-3 border-[#52C41A] hover:bg-transparent hover:text-[#52C41A] transition-all duration-200 disabled:opacity-50 mt-2"
+              className="w-full bg-[#C9A96E] text-black font-black uppercase tracking-widest text-sm py-3.5 border-3 border-[#C9A96E] hover:bg-transparent hover:text-[#C9A96E] transition-all duration-200 disabled:opacity-50 mt-2"
             >
               {loading ? "Signing in..." : "Sign In"}
             </button>

@@ -36,13 +36,19 @@ async function seed() {
     console.log(`  ✓ Category: ${cat.name}`);
   }
 
-  // Admin user — change this password!
-  const password = await bcrypt.hash("changeme123", 12);
+  // Admin user — credentials loaded from .env.local
+  const adminEmail = process.env.ADMIN_EMAIL;
+  const adminPassword = process.env.ADMIN_PASSWORD;
+  if (!adminEmail || !adminPassword) {
+    console.error("  ✗ ADMIN_EMAIL and ADMIN_PASSWORD must be set in .env.local");
+    process.exit(1);
+  }
+  const password = await bcrypt.hash(adminPassword, 12);
   await db
     .insert(users)
-    .values({ email: "sas@example.com", password })
+    .values({ email: adminEmail, password })
     .onConflictDoNothing();
-  console.log("  ✓ Admin user: sas@example.com / changeme123");
+  console.log(`  ✓ Admin user: ${adminEmail}`);
 
   console.log("\n✅ Done! Update the admin password after first login.");
   process.exit(0);

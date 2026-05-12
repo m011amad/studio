@@ -1,7 +1,8 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
-//import ThemeProvider from "@/providers/ThemeProvider";
 import ThemeProvider from "../providers/ThemeProvider";
+import ScrollCamera from "../components/ScrollCamera";
+import ViewfinderCursor from "../components/ViewfinderCursor";
 
 import "./globals.css";
 
@@ -43,6 +44,8 @@ export default function RootLayout({ children }) {
         <AntdRegistry>
           <ThemeProvider>{children}</ThemeProvider>
         </AntdRegistry>
+        <ScrollCamera />
+        <ViewfinderCursor />
       </body>
     </html>
   );

@@ -21,7 +21,7 @@ export default function About() {
     <section
       id="about"
       ref={ref}
-      className="bg-[#2C2C2C] py-24 px-6 md:px-10 overflow-hidden"
+      className="bg-[#1A1310] py-24 px-6 md:px-10 overflow-hidden"
     >
       <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-16 items-center">
         {/* Left — text */}
@@ -30,7 +30,7 @@ export default function About() {
             initial={{ opacity: 0, x: -20 }}
             animate={inView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.5 }}
-            className="text-[#52C41A] text-xs font-black uppercase tracking-[0.3em] mb-4"
+            className="text-[#C9A96E] text-xs font-black uppercase tracking-[0.3em] mb-4"
           >
             About
           </motion.p>
@@ -61,7 +61,7 @@ export default function About() {
               fontSize: "1.05rem",
             }}
           >
-            Sas is a photographer whose work spans the full breadth of visual
+            I'm a photographer whose work spans the full breadth of visual
             storytelling — from the raw stillness of nature to the kinetic
             energy of machines and the quiet intimacy of people in their
             element.
@@ -104,8 +104,8 @@ export default function About() {
           >
             <ConnectDrawer
               trigger={
-                <button className="inline-block bg-[#52C41A] text-black font-black uppercase tracking-widest text-sm px-8 py-3 border-3 border-[#52C41A] hover:bg-transparent hover:text-[#52C41A] transition-all duration-200">
-                  Work With Sas
+                <button className="inline-block bg-[#C9A96E] text-black font-black uppercase tracking-widest text-sm px-8 py-3 border-3 border-[#C9A96E] hover:bg-transparent hover:text-[#C9A96E] transition-all duration-200">
+                  Work With Me
                 </button>
               }
             />
@@ -121,22 +121,22 @@ export default function About() {
         >
           <div className="grid grid-cols-2 gap-3">
             {[
-              { bg: "#52C41A", h: "h-48", label: "Nature" },
-              { bg: "#FFF9F0", h: "h-32", label: "People" },
-              { bg: "#FFF9F0", h: "h-32", label: "Cars" },
-              { bg: "#52C41A", h: "h-48", label: "Everything" },
+              { bg: "#C9A96E", h: "h-48", label: "Nature" },
+              { bg: "#EDE8DF", h: "h-32", label: "People" },
+              { bg: "#EDE8DF", h: "h-32", label: "Cars" },
+              { bg: "#C9A96E", h: "h-48", label: "Everything" },
             ].map(({ bg, h, label }) => (
               <div
                 key={label}
                 className={`${h} border-3 border-white/10 flex items-end p-4`}
                 style={{
                   backgroundColor:
-                    bg === "#FFF9F0" ? "rgba(255,249,240,0.05)" : bg + "22",
+                    bg === "#EDE8DF" ? "rgba(255,249,240,0.05)" : bg + "22",
                 }}
               >
                 <span
                   className="text-white/30 text-xs font-black uppercase tracking-widest"
-                  style={{ color: bg === "#52C41A" ? "#52C41A88" : undefined }}
+                  style={{ color: bg === "#C9A96E" ? "#C9A96E88" : undefined }}
                 >
                   {label}
                 </span>
@@ -144,8 +144,8 @@ export default function About() {
             ))}
           </div>
           {/* Accent */}
-          <div className="absolute -top-4 -right-4 w-24 h-24 border-3 border-[#52C41A]/30" />
-          <div className="absolute -bottom-4 -left-4 w-16 h-16 bg-[#52C41A]/10 border-3 border-[#52C41A]/20" />
+          <div className="absolute -top-4 -right-4 w-24 h-24 border-3 border-[#C9A96E]/30" />
+          <div className="absolute -bottom-4 -left-4 w-16 h-16 bg-[#C9A96E]/10 border-3 border-[#C9A96E]/20" />
         </motion.div>
       </div>
     </section>

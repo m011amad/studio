@@ -17,7 +17,6 @@ export default function ConnectDrawer({ trigger }) {
     name: "",
     email: "",
     phone: "",
-    message: "",
     projectDetails: "",
     budget: "",
     additionalComments: "",
@@ -28,7 +27,7 @@ export default function ConnectDrawer({ trigger }) {
     setForm((p) => ({ ...p, [e.target.name]: e.target.value }));
 
   const handleSubmit = async () => {
-    if (!form.name || !form.email || !form.message) return;
+    if (!form.name || !form.email || !form.projectDetails) return;
     setStatus("loading");
     try {
       const res = await fetch("/api/enquiries", {
@@ -38,7 +37,7 @@ export default function ConnectDrawer({ trigger }) {
       });
       if (!res.ok) throw new Error();
       setStatus("success");
-      setForm({ name: "", email: "", phone: "", message: "", projectDetails: "", budget: "", additionalComments: "" });
+      setForm({ name: "", email: "", phone: "", projectDetails: "", budget: "", additionalComments: "" });
     } catch {
       setStatus("error");
     }
@@ -143,27 +142,14 @@ export default function ConnectDrawer({ trigger }) {
                 </div>
                 <div>
                   <label className="text-xs font-bold uppercase tracking-widest text-[#2A2520]/60 mb-1.5 block">
-                    Message *
-                  </label>
-                  <textarea
-                    name="message"
-                    value={form.message}
-                    onChange={handleChange}
-                    placeholder="Tell me about your project..."
-                    rows={4}
-                    className="w-full px-4 py-3 bg-[#F5F0EA] border-3 border-[#2A2520] shadow-[4px_4px_0_#2A2520] text-[#2A2520] placeholder:text-[#2A2520]/30 font-medium focus:outline-none focus:shadow-[2px_2px_0_#C9A96E] focus:border-[#C9A96E] transition-all resize-none"
-                  />
-                </div>
-                <div>
-                  <label className="text-xs font-bold uppercase tracking-widest text-[#2A2520]/60 mb-1.5 block">
-                    Project Details <span className="text-[#2A2520]/30 normal-case font-medium tracking-normal">— optional</span>
+                    Project Details *
                   </label>
                   <textarea
                     name="projectDetails"
                     value={form.projectDetails}
                     onChange={handleChange}
                     placeholder="Describe the shoot — location, style, timeline..."
-                    rows={3}
+                    rows={4}
                     className="w-full px-4 py-3 bg-[#F5F0EA] border-3 border-[#2A2520] shadow-[4px_4px_0_#2A2520] text-[#2A2520] placeholder:text-[#2A2520]/30 font-medium focus:outline-none focus:shadow-[2px_2px_0_#C9A96E] focus:border-[#C9A96E] transition-all resize-none"
                   />
                 </div>

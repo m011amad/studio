@@ -1,5 +1,5 @@
 import { db } from "@/lib/db";
-import { purchases, wallpaperPackages, wallpaperImages } from "@/lib/schema";
+import { purchases, wallpaperPackages } from "@/lib/schema";
 import { stripe } from "@/lib/stripe";
 import { eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
@@ -8,6 +8,8 @@ import { Resend } from "resend";
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(req) {
+  if (!stripe) return NextResponse.json({ received: true });
+
   const body = await req.text();
   const sig = req.headers.get("stripe-signature");
 

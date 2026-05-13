@@ -9,17 +9,53 @@ const sql = neon(process.env.DATABASE_URL);
 async function migrate() {
   console.log("Running migration...");
 
-  // Drop FK constraint from photos -> categories
-  await sql`ALTER TABLE photos DROP CONSTRAINT IF EXISTS photos_category_id_categories_id_fk`;
+  await sql`
+    CREATE TABLE IF NOT EXISTS categories (
+      id SERIAL PRIMARY KEY,
+      name TEXT NOT NULL,
+      slug TEXT NOT NULL UNIQUE,
+      "order" INTEGER DEFAULT 0,
+      created_at TIMESTAMP DEFAULT NOW()
+    )
+  `;
 
-  // Drop category_id column from photos
-  await sql`ALTER TABLE photos DROP COLUMN IF EXISTS category_id`;
+  await sql`ALTER TABLE photos ADD COLUMN IF NOT EXISTS gallery_id INTEGER REFERENCES categories(id) ON DELETE SET NULL`;
 
-  // Add orientation column (landscape | portrait)
-  await sql`ALTER TABLE photos ADD COLUMN IF NOT EXISTS orientation text NOT NULL DEFAULT 'landscape'`;
+  await sql`
+    CREATE TABLE IF NOT EXISTS wallpaper_packages (
+      id SERIAL PRIMARY KEY,
+      name TEXT NOT NULL,
+      description TEXT,
+      price INTEGER NOT NULL,
+      stripe_product_id TEXT,
+      stripe_price_id TEXT,
+      cover_url TEXT,
+      active BOOLEAN DEFAULT TRUE,
+      "order" INTEGER DEFAULT 0,
+      created_at TIMESTAMP DEFAULT NOW()
+    )
+  `;
 
-  // Drop categories table
-  await sql`DROP TABLE IF EXISTS categories`;
+  await sql`
+    CREATE TABLE IF NOT EXISTS wallpaper_images (
+      id SERIAL PRIMARY KEY,
+      package_id INTEGER NOT NULL REFERENCES wallpaper_packages(id) ON DELETE CASCADE,
+      url TEXT NOT NULL,
+      public_id TEXT NOT NULL,
+      "order" INTEGER DEFAULT 0
+    )
+  `;
+
+  await sql`
+    CREATE TABLE IF NOT EXISTS purchases (
+      id SERIAL PRIMARY KEY,
+      package_id INTEGER REFERENCES wallpaper_packages(id) ON DELETE SET NULL,
+      customer_email TEXT NOT NULL,
+      stripe_session_id TEXT NOT NULL UNIQUE,
+      email_sent BOOLEAN DEFAULT FALSE,
+      created_at TIMESTAMP DEFAULT NOW()
+    )
+  `;
 
   console.log("Migration complete.");
 }

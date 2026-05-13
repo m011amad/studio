@@ -1,17 +1,28 @@
 import { db } from "@/lib/db";
-import { photos } from "@/lib/schema";
-import { eq } from "drizzle-orm";
+import { photos, categories, wallpaperPackages, wallpaperImages } from "@/lib/schema";
+import { eq, isNotNull, asc } from "drizzle-orm";
 import Hero from "@/components/Hero";
 import Gallery from "@/components/Gallery";
 import FilmStrip from "@/components/FilmStrip";
 import About from "@/components/About";
+import GallerySection from "@/components/GallerySection";
+import WallpaperSection from "@/components/WallpaperSection";
 import ScrollCamera from "@/components/ScrollCamera";
 import ConnectDrawer from "@/components/ConnectDrawer";
 import { Mail } from "lucide-react";
 
 function InstagramIcon({ size = 16 }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
       <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
       <circle cx="12" cy="12" r="4" />
       <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
@@ -22,26 +33,44 @@ function InstagramIcon({ size = 16 }) {
 export const revalidate = 60;
 
 async function getData() {
-  const [landscapePhotos, portraitPhotos] = await Promise.all([
-    db.select().from(photos).where(eq(photos.orientation, "landscape")).orderBy(photos.uploadedAt),
-    db.select().from(photos).where(eq(photos.orientation, "portrait")).orderBy(photos.uploadedAt),
-  ]);
-  return { landscapePhotos, portraitPhotos };
+  const [landscapePhotos, portraitPhotos, galleryCategories, galleryPhotos, pkgs, wpImages] =
+    await Promise.all([
+      db.select().from(photos).where(eq(photos.orientation, "landscape")).orderBy(photos.uploadedAt),
+      db.select().from(photos).where(eq(photos.orientation, "portrait")).orderBy(photos.uploadedAt),
+      db.select().from(categories).orderBy(categories.order),
+      db.select().from(photos).where(isNotNull(photos.galleryId)).orderBy(photos.uploadedAt),
+      db.select().from(wallpaperPackages).where(eq(wallpaperPackages.active, true)).orderBy(asc(wallpaperPackages.order)),
+      db.select().from(wallpaperImages).orderBy(asc(wallpaperImages.order)),
+    ]);
+
+  const photosByGallery = {};
+  for (const cat of galleryCategories) {
+    photosByGallery[cat.id] = galleryPhotos.filter((p) => p.galleryId === cat.id);
+  }
+
+  const packages = pkgs.map((p) => ({ ...p, images: wpImages.filter((img) => img.packageId === p.id) }));
+
+  return { landscapePhotos, portraitPhotos, galleryCategories, photosByGallery, packages };
 }
 
 export default async function HomePage() {
-  const { landscapePhotos, portraitPhotos } = await getData();
+  const { landscapePhotos, portraitPhotos, galleryCategories, photosByGallery, packages } = await getData();
 
   return (
     <main className="min-h-screen">
       <FilmStrip />
       <ScrollCamera />
-      <Gallery landscapePhotos={landscapePhotos} portraitPhotos={portraitPhotos} />
+      <Gallery
+        landscapePhotos={landscapePhotos}
+        portraitPhotos={portraitPhotos}
+      />
       <Hero />
+      <GallerySection galleries={galleryCategories} photosByGallery={photosByGallery} />
+      <WallpaperSection packages={packages} />
       <About />
 
       {/* Footer */}
-      <footer className="bg-[#0E0D0C] py-12 px-6 md:px-10 border-t-3 border-[#2A2520]">
+      <footer className="bg-[#0E0D0C] py-12 px-6 md:px-10 border-t border-white/5">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
           <span
             className="text-white font-black text-3xl"
@@ -61,7 +90,9 @@ export default async function HomePage() {
               className="flex items-center gap-1.5 text-white/30 hover:text-[#C9A96E] transition-colors duration-200"
             >
               <InstagramIcon size={16} />
-              <span className="text-xs font-bold tracking-widest uppercase">@captsas_</span>
+              <span className="text-xs font-bold tracking-widest uppercase">
+                @captsas_
+              </span>
             </a>
             <a
               href="https://instagram.com/s8r_sas"
@@ -70,7 +101,9 @@ export default async function HomePage() {
               className="flex items-center gap-1.5 text-white/30 hover:text-[#C9A96E] transition-colors duration-200"
             >
               <InstagramIcon size={16} />
-              <span className="text-xs font-bold tracking-widest uppercase">@s8r_sas</span>
+              <span className="text-xs font-bold tracking-widest uppercase">
+                @s8r_sas
+              </span>
             </a>
             <a
               href="mailto:captsas.media@gmail.com"

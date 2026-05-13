@@ -3,11 +3,9 @@
 import { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-export default function PhotoUploader({ categories, onUploaded }) {
+export default function PhotoUploader({ onUploaded }) {
   const [files, setFiles] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState(
-    categories[0]?.id ?? "",
-  );
+  const [orientation, setOrientation] = useState("landscape");
   const [uploading, setUploading] = useState(false);
   const [progress, setProgress] = useState([]);
   const inputRef = useRef(null);
@@ -34,11 +32,8 @@ export default function PhotoUploader({ categories, onUploaded }) {
     setUploading(true);
     setProgress(files.map(() => "pending"));
 
-    // Get Cloudinary signature
     const sigRes = await fetch("/api/cloudinary-sign");
     const { timestamp, signature, apiKey, cloudName } = await sigRes.json();
-
-    const results = [];
 
     for (let i = 0; i < files.length; i++) {
       setProgress((p) => p.map((v, idx) => (idx === i ? "uploading" : v)));
@@ -56,18 +51,16 @@ export default function PhotoUploader({ categories, onUploaded }) {
         );
         const data = await res.json();
 
-        // Save to DB
         await fetch("/api/photos", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             url: data.secure_url,
             publicId: data.public_id,
-            categoryId: selectedCategory || null,
+            orientation,
           }),
         });
 
-        results.push(data.secure_url);
         setProgress((p) => p.map((v, idx) => (idx === i ? "done" : v)));
       } catch {
         setProgress((p) => p.map((v, idx) => (idx === i ? "error" : v)));
@@ -92,23 +85,29 @@ export default function PhotoUploader({ categories, onUploaded }) {
         Upload Photos
       </h3>
 
-      {/* Category selector */}
+      {/* Orientation toggle */}
       <div className="mb-4">
         <label className="text-xs font-bold uppercase tracking-widest text-[#2A2520]/60 mb-1.5 block">
-          Gallery / Category
+          Orientation
         </label>
-        <select
-          value={selectedCategory}
-          onChange={(e) => setSelectedCategory(e.target.value)}
-          className="w-full px-4 py-3 bg-[#EDE8DF] border-3 border-[#2A2520] shadow-[3px_3px_0_#2A2520] text-[#2A2520] font-bold focus:outline-none appearance-none cursor-pointer"
-        >
-          <option value="">No category</option>
-          {categories.map((c) => (
-            <option key={c.id} value={c.id}>
-              {c.name}
-            </option>
+        <div className="flex gap-2">
+          {[
+            { value: "landscape", label: "Landscape 16:9" },
+            { value: "portrait", label: "Portrait 9:16" },
+          ].map((opt) => (
+            <button
+              key={opt.value}
+              onClick={() => setOrientation(opt.value)}
+              className={`flex-1 text-xs font-black uppercase tracking-widest py-2.5 border-3 border-[#2A2520] transition-all duration-150 ${
+                orientation === opt.value
+                  ? "bg-[#2A2520] text-white shadow-[3px_3px_0_#C9A96E]"
+                  : "bg-[#EDE8DF] text-[#2A2520] shadow-[3px_3px_0_#2A2520] hover:shadow-[1px_1px_0_#2A2520] hover:translate-x-0.5 hover:translate-y-0.5"
+              }`}
+            >
+              {opt.label}
+            </button>
           ))}
-        </select>
+        </div>
       </div>
 
       {/* Drop zone */}

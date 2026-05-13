@@ -1,21 +1,11 @@
-import { pgTable, text, serial, timestamp, integer } from "drizzle-orm/pg-core";
-
-export const categories = pgTable("categories", {
-  id: serial("id").primaryKey(),
-  name: text("name").notNull(),
-  slug: text("slug").notNull().unique(),
-  order: integer("order").default(0),
-  createdAt: timestamp("created_at").defaultNow(),
-});
+import { pgTable, text, serial, timestamp } from "drizzle-orm/pg-core";
 
 export const photos = pgTable("photos", {
   id: serial("id").primaryKey(),
   url: text("url").notNull(),
   publicId: text("public_id").notNull(),
   title: text("title"),
-  categoryId: integer("category_id").references(() => categories.id, {
-    onDelete: "set null",
-  }),
+  orientation: text("orientation").notNull().default("landscape"),
   uploadedAt: timestamp("uploaded_at").defaultNow(),
 });
 

@@ -1,9 +1,11 @@
 import { db } from "@/lib/db";
-import { categories, photos } from "@/lib/schema";
+import { photos } from "@/lib/schema";
+import { eq } from "drizzle-orm";
 import Hero from "@/components/Hero";
 import Gallery from "@/components/Gallery";
 import FilmStrip from "@/components/FilmStrip";
 import About from "@/components/About";
+import ScrollCamera from "@/components/ScrollCamera";
 import ConnectDrawer from "@/components/ConnectDrawer";
 import { Mail } from "lucide-react";
 
@@ -20,27 +22,22 @@ function InstagramIcon({ size = 16 }) {
 export const revalidate = 60;
 
 async function getData() {
-  const [cats, allPhotos] = await Promise.all([
-    db.select().from(categories).orderBy(categories.order),
-    db.select().from(photos).orderBy(photos.uploadedAt),
+  const [landscapePhotos, portraitPhotos] = await Promise.all([
+    db.select().from(photos).where(eq(photos.orientation, "landscape")).orderBy(photos.uploadedAt),
+    db.select().from(photos).where(eq(photos.orientation, "portrait")).orderBy(photos.uploadedAt),
   ]);
-
-  const photosByCategory = {};
-  for (const cat of cats) {
-    photosByCategory[cat.id] = allPhotos.filter((p) => p.categoryId === cat.id);
-  }
-
-  return { cats, photosByCategory };
+  return { landscapePhotos, portraitPhotos };
 }
 
 export default async function HomePage() {
-  const { cats, photosByCategory } = await getData();
+  const { landscapePhotos, portraitPhotos } = await getData();
 
   return (
     <main className="min-h-screen">
-      <Hero />
-      <Gallery categories={cats} photosByCategory={photosByCategory} />
       <FilmStrip />
+      <ScrollCamera />
+      <Gallery landscapePhotos={landscapePhotos} portraitPhotos={portraitPhotos} />
+      <Hero />
       <About />
 
       {/* Footer */}

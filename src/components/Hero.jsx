@@ -130,7 +130,7 @@ export default function Hero() {
             className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start"
           >
             <a
-              href="#work"
+              href="#galleries"
               className="inline-block bg-[#C9A96E] text-black font-black uppercase tracking-widest text-sm px-8 py-3 border-3 border-[#C9A96E] hover:bg-transparent hover:text-[#C9A96E] transition-all duration-200"
             >
               View Work

@@ -1,36 +1,82 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# SAS Photography Studio
 
-## Getting Started
+A portfolio and storefront I built for a photographer friend. It's a full-stack Next.js app — photo galleries, a wallpaper store with Stripe payments, and an admin dashboard to manage everything without touching code.
 
-First, run the development server:
+## What it does
+
+- **Carousel** — full-viewport slideshow on the landing page. Desktop shows landscape (16:9) shots, mobile switches to portrait (9:16) automatically. Auto-advances every 5 seconds, swipeable.
+- **Named galleries** — tabbed masonry layout with a lightbox. The photographer can create gallery categories (Nature, Cars, etc.) from the admin and assign photos to them.
+- **Wallpaper store** — customers pick a package, pay once via Stripe, and get a download link by email + a permanent download page. 20% platform fee, 80% to the photographer via Stripe Connect.
+- **Admin dashboard** — upload photos, manage galleries, create wallpaper packages, drag-drop wallpaper images. No code needed after setup.
+
+## Stack
+
+- **Next.js 16** (App Router)
+- **NeonDB** (Postgres) + **Drizzle ORM**
+- **Cloudinary** — image storage and delivery
+- **Stripe** — checkout, webhooks, Connect for payment splitting
+- **Resend** — transactional emails (download links)
+- **Tailwind CSS v4** + **Framer Motion**
+- Deployed on **Vercel**
+
+## Getting started
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Environment variables
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+Create a `.env.local` with the following:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```env
+# Neon Postgres
+DATABASE_URL=
 
-## Learn More
+# Auth.js
+AUTH_SECRET=
 
-To learn more about Next.js, take a look at the following resources:
+# Cloudinary
+CLOUDINARY_CLOUD_NAME=
+CLOUDINARY_API_KEY=
+CLOUDINARY_API_SECRET=
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+# Resend
+RESEND_API_KEY=
+NOTIFICATION_EMAIL=
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+# Stripe
+STRIPE_SECRET_KEY=
+STRIPE_WEBHOOK_SECRET=
+STRIPE_PHOTOGRAPHER_ACCOUNT_ID=   # acct_xxxx — for the 20/80 payment split
 
-## Deploy on Vercel
+# App
+NEXT_PUBLIC_URL=https://yourdomain.com
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Database
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+I wrote a custom migration script because drizzle-kit push needs an interactive TTY (doesn't work in CI or non-interactive shells):
+
+```bash
+node scripts/migrate.js
+```
+
+Runs raw SQL with `IF NOT EXISTS` guards — safe to run multiple times.
+
+## Admin access
+
+Hit `/admin` — it's behind NextAuth so you need a user in the DB. The SAS logo on the public site has a hidden 5-tap easter egg that redirects to `/admin` too.
+
+## Stripe webhooks (local dev)
+
+```bash
+stripe listen --forward-to localhost:3000/api/webhooks/stripe
+```
+
+Paste the webhook secret it gives you into `STRIPE_WEBHOOK_SECRET`.
+
+## Payment split
+
+Stripe Connect handles the 20/80 split at checkout. The photographer needs a Stripe account — grab their `acct_xxxx` ID from their Stripe dashboard and set it as `STRIPE_PHOTOGRAPHER_ACCOUNT_ID`. If that env var isn't set, the full amount goes to the platform account.
